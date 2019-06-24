@@ -1,1 +1,1 @@
-npm i && node client.js
+sudo npm i --save  && node client.js
