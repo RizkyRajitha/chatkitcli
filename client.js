@@ -4,6 +4,8 @@ const axios = require("axios");
 const { JSDOM } = require("jsdom");
 const readline = require("readline");
 
+//require("tty").setRawMode(true);
+
 makeCompatible = () => {
   const { window } = new JSDOM();
   global.window = window;
@@ -145,10 +147,23 @@ const subsroom = async user => {
 
         if (message.senderId !== user.name) {
           console.log(
-            message.senderId + " " + message.parts[0].payload.content
+            //message.createdAt +
+              " " +
+              message.senderId +
+              " : " +
+              message.parts[0].payload.content
           );
         }
-      }
+      }, //onUserJoined
+      // onUserStartedTyping: userobj => {
+      //   console.log(userobj.name + " is typing...");
+      // }, //
+      onUserJoined: userobj => {
+        console.log(userobj.name + "joined...");
+      },
+      // onPresenceChanged: states => {
+      //   console.log(JSON.stringify(states) + "joined...");
+      // }
     },
 
     messageLimit: 0
@@ -156,8 +171,20 @@ const subsroom = async user => {
 
   const input = readline.createInterface({ input: process.stdin });
 
+  // stdin.on("keypress", function(chunk, key) {
+  //   user
+  //     .isTypingIn({ roomId: selectedRoom.id })
+  //     .then(() => {
+  //      // console.log("Success!");
+  //     })
+  //     .catch(err => {
+  //      // console.log(`Error sending typing indicator: ${err}`);
+  //     });
+  // });
+
   input.on("line", async test => {
     //console.log(test)
+
     await user.sendSimpleMessage({ roomId: selectedRoom.id, text: test });
   });
   //   });
